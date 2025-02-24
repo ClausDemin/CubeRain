@@ -12,9 +12,7 @@ namespace Assets.Codebase
         [SerializeField, Range(2, 5)] private float _minLifetime;
         [SerializeField, Range(2, 5)] private float _maxLifetime;
 
-        private Color _defaultColor;
-
-        private MeshRenderer _meshRenderer;
+        private ColorChanger _colorChanger;
 
         private bool _isPlatformTouched;
 
@@ -25,8 +23,7 @@ namespace Assets.Codebase
 
         private void Awake()
         {
-            _meshRenderer = GetComponent<MeshRenderer>();
-            _defaultColor = _meshRenderer.material.color;
+            _colorChanger = new ColorChanger(GetComponent<MeshRenderer>());
 
             Disable();
         }
@@ -43,7 +40,7 @@ namespace Assets.Codebase
         {
             if (collision.gameObject.TryGetComponent<Platform>(out Platform platform) && _isPlatformTouched == false) 
             {
-                SelectRandomColor();
+                _colorChanger.SelectRandomColor();
 
                 float lifetime = Randomizer.GetRandomFloat(_minLifetime, _maxLifetime);
 
@@ -55,7 +52,8 @@ namespace Assets.Codebase
 
         private void OnDisable()
         {
-            _meshRenderer.material.color = _defaultColor;
+            _colorChanger.ResetColor();
+
             _isPlatformTouched = false;
 
             IsFree = true;
@@ -87,15 +85,6 @@ namespace Assets.Codebase
             gameObject.SetActive(false);
 
             Released?.Invoke(this);
-        }
-
-        private void SelectRandomColor()
-        {
-            if (_meshRenderer != null)
-            {
-                _meshRenderer.material.color =
-                    new Color(Randomizer.GetRandomFloat(), Randomizer.GetRandomFloat(), Randomizer.GetRandomFloat());
-            }
         }
     }
 }
