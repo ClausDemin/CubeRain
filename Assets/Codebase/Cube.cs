@@ -16,17 +16,10 @@ namespace Assets.Codebase
 
         private bool _isPlatformTouched;
 
-        public bool IsFree { get; private set; }
-
         public event Action<IPooledInstance> Released;
         public event Action<IPooledInstance> Disposed;
 
-        private void Awake()
-        {
-            _colorChanger = new ColorChanger(GetComponent<MeshRenderer>());
-
-            Disable();
-        }
+        public bool IsFree { get; private set; }
 
         private void OnValidate()
         {
@@ -36,9 +29,16 @@ namespace Assets.Codebase
             }
         }
 
+        private void Awake()
+        {
+            _colorChanger = new ColorChanger(GetComponent<MeshRenderer>());
+
+            Disable();
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.TryGetComponent<Platform>(out Platform platform) && _isPlatformTouched == false) 
+            if (_isPlatformTouched == false && collision.gameObject.TryGetComponent<Platform>(out Platform platform)) 
             {
                 _colorChanger.SelectRandomColor();
 

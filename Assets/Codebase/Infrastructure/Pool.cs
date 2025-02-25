@@ -6,11 +6,11 @@ public class Pool<T>
 {
     private IPooledInstanceFactory _factory;
 
-    private Queue<T> _pool;
+    private Queue<T> _items;
 
     public Pool(IPooledInstanceFactory factory, int prewarmedCount = 0)
     {
-        _pool = new Queue<T>();
+        _items = new Queue<T>();
         _factory = factory;
 
         if (prewarmedCount > 0)
@@ -21,7 +21,7 @@ public class Pool<T>
 
     public T Get()
     {
-        _pool.TryDequeue(out T freeObject);
+        _items.TryDequeue(out T freeObject);
 
         if (freeObject == null)
         {
@@ -45,14 +45,14 @@ public class Pool<T>
 
     private void OnRelease(IPooledInstance instance)
     {
-        _pool.Enqueue(instance as T);
+        _items.Enqueue(instance as T);
     }
 
     private void CreatePrewarmedInstances(int count)
     {
         for (int i = 0; i < count; i++)
         {
-            _pool.Enqueue(Create());
+            _items.Enqueue(Create());
         }
     }
 

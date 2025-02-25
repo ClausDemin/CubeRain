@@ -18,7 +18,7 @@ namespace Assets.Codebase
         {
             _spawnArea = new CircleSpawnArea(_spawnRadius);
 
-            _pool = new Pool<Cube>(new CubeFactory(_prefab), 5);
+            _pool = new Pool<Cube>(new Factory<Cube>(_prefab), 5);
         }
 
         private void Start()
