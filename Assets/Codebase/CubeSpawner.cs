@@ -7,6 +7,8 @@ namespace Assets.Codebase
     public class CubeSpawner: MonoBehaviour
     {
         [SerializeField] private Cube _prefab;
+        [SerializeField, Min(0)] private int _prewarmedEntitiesCount;
+
         [SerializeField, Min(0.1f)] private float _spawnDelay;
         [SerializeField] private float _spawnRadius;
 
@@ -18,7 +20,7 @@ namespace Assets.Codebase
         {
             _spawnArea = new CircleSpawnArea(_spawnRadius);
 
-            _pool = new Pool<Cube>(new Factory<Cube>(_prefab), 5);
+            _pool = new Pool<Cube>(new MonoBehaviourFactory<Cube>(_prefab), _prewarmedEntitiesCount);
         }
 
         private void Start()

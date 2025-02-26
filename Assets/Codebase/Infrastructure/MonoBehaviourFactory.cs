@@ -3,17 +3,17 @@ using UnityEngine;
 
 namespace Assets.Codebase.Service
 {
-    public class Factory<T> : IPooledInstanceFactory
-        where T : MonoBehaviour, IPooledInstance
+    public class MonoBehaviourFactory<T>: IFactory<T>
+        where T : MonoBehaviour
     {
         private T _prefab;
 
-        public Factory(T prefab)
+        public MonoBehaviourFactory(T prefab)
         {
             _prefab = prefab;
         }
 
-        public IPooledInstance Create()
+        public T Create()
         {
             T instance = GameObject.Instantiate(_prefab);
 

@@ -1,14 +1,15 @@
 using Assets.Codebase.Interfaces;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Pool<T>
-    where T : class, IPooledInstance
+    where T : MonoBehaviour, IPooledInstance
 {
-    private IPooledInstanceFactory _factory;
+    private IFactory<T> _factory;
 
     private Queue<T> _items;
 
-    public Pool(IPooledInstanceFactory factory, int prewarmedCount = 0)
+    public Pool(IFactory<T> factory, int prewarmedCount = 0)
     {
         _items = new Queue<T>();
         _factory = factory;
@@ -35,7 +36,7 @@ public class Pool<T>
 
     private T Create()
     {
-        T instance = (_factory.Create() as T);
+        T instance = _factory.Create();
 
         instance.Released += OnRelease;
         instance.Disposed += OnDispose;
